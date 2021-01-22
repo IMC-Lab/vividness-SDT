@@ -8,7 +8,7 @@ stimlist_all <- norms %>% select(-ends_with('clipart')) %>%
   arrange(desc(familiarity_photo), desc(image_agreement_photo)) %>% 
   filter(name_agreement_photo > 50) 
 
-# make stim files 
+# make encoding files 
 pseudorandomTrials <- function (length=25, repetitions=3) {
   trials <- rep(c('imagine', 'perceive'), each=length)
   while (max(rle(trials)$lengths) > repetitions)
@@ -16,7 +16,9 @@ pseudorandomTrials <- function (length=25, repetitions=3) {
   return(trials)
 }
 
-make_stimFiles <- function (n_subs=4) {
+set.seed(42)
+
+make_encodingFiles <- function (n_subs=4) {
   for (sub in 1:n_subs) {
     stim_file <- stimlist_all %>% 
       select(item, filepath) %>% 
@@ -32,8 +34,8 @@ make_stimFiles <- function (n_subs=4) {
         mutate(condition = 'reduced_alpha',
                filepath = paste0('reduced_alpha/', filepath))
     }
-    write.csv(stim_file, file = paste0('stim_files/s', as.character(sub), '_stimfile.csv'), row.names = F) 
+    write.csv(stim_file, file = paste0('stim_files/s', as.character(sub), '_encoding.csv'), row.names = F) 
   }
 }
 
-make_stimFiles(n=50)
+make_encodingFiles(50)
